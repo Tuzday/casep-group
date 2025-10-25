@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CASEP Group – Interactive Web App</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Custom Styles -->
+  <style>
+    :root {
+      --accent: #ffc107;
+      --brand-dark: #0b2540;
+      --brand-light: #ffffff;
+      --surface: #f8f9fa;
+      --text-dark: #0b1220;
+      --text-light: #ffffff;
+    }
+
+    /* Theme */
+    body[data-theme="dark"] {
+      --surface: #0b1220;
+      --text-dark: #f8f9fa;
+      --text-light: #f8f9fa;
+      background-color: var(--surface);
+      color: var(--text-dark);
+    }
+
+    body[data-theme="light"] {
+      background-color: var(--surface);
+      color: var(--text-dark);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Navbar shrink (only padding change; remains transparent) */
+    .navbar-shrink {
+      padding-top: .25rem !important;
+      padding-bottom: .25rem !important;
+      transition: padding .25s ease;
+      /* intentionally no background so navbar stays transparent */
+    }
+
+    .navbar {
+      padding-top: .75rem;
+      padding-bottom: .75rem;
+      transition: padding .25s ease;
+      background: transparent !important;
+    }
+
+    .nav-link {
+      transition: color .15s ease, transform .15s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent) !important;
+      transform: translateY(-2px);
+    }
+
+    /* Hero video */
+    .hero-section {
+      position: relative;
+      height: 85vh;
+      min-height: 520px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-light);
+    }
+
+    .hero-section video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(3, 10, 20, 0.45), rgba(3, 10, 20, 0.6));
+      z-index: 1;
+    }
+
+    .hero-content {
+      z-index: 2;
+      max-width: 1000px;
+      text-align: center;
+      padding: 1rem;
+      color: var(--text-light);
+    }
+
+    .hero-content .display-4 {
+      font-weight: 700;
+    }
+
+    /* Cards hover */
+    .card-service {
+      transition: transform .28s ease, box-shadow .28s ease;
+      cursor: pointer;
+    }
+
+    .card-service:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 30px rgba(2, 6, 23, 0.12);
+    }
+
+    /* Stats */
+    .stat {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--brand-dark);
+    }
+
+    body[data-theme="dark"] .stat {
+      color: var(--accent);
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Back to top */
+    #backToTop {
+      position: fixed;
+      right: 18px;
+      bottom: 22px;
+      z-index: 1050;
+      display: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      box-shadow: 0 8px 20px rgba(2, 6, 23, 0.18);
+    }
+
+    /* Footer social icons */
+    .social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      margin: 0 6px;
+    }
+
+    /* Modal content tweaks */
+    .modal-header .btn-close {
+      margin: -0.5rem -0.5rem -0.5rem 0;
+    }
+
+    /* Small screens adjustments */
+    @media (max-width: 576px) {
+      .hero-section {
+        height: 68vh;
+        min-height: 420px;
+      }
+
+      .display-4 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+
+  <!-- NAVBAR -->
+  <nav id="mainNav" class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="casep logo.png" alt="CASEP Group Logo" class="me-2" style="height: 60px; width: auto;">
+        <span class="fw-bold text-white visually-hidden">CASEP Group</span>
+      </a>
+      <button class="btn btn-outline-light d-lg-none me-2" id="themeToggle" title="Toggle theme"><i
+          class="bi bi-moon-fill"></i></button>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#vision">Vision</a></li>
+          <li class="nav-item"><a class="nav-link" href="#mission">Mission</a></li>
+          <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="#values">Values</a></li>
+          <li class="nav-item"><a class="nav-link" href="#partner">Why Partner</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item ms-3 d-none d-lg-block">
+            <button class="btn btn-warning fw-semibold" data-bs-toggle="modal"
+              data-bs-target="#contactModal">Enquire</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO (VIDEO) -->
+  <header class="hero-section">
+    <!-- Sample video (Big Buck Bunny) as placeholder; replace with your own if available -->
+    <video autoplay muted loop playsinline>
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+      <!-- Fallback image -->
+    </video>
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-content text-center reveal">
+      <h1 class="display-4 mb-3">Welcome to CASEP Group</h1>
+      <p class="lead mb-4">Transforming businesses through strategic, innovative, and results-driven services.</p>
+      <div class="d-flex justify-content-center gap-2 flex-wrap">
+        <a href="#services" class="btn btn-warning btn-lg fw-semibold">Our Services</a>
+        <button class="btn btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#contactModal">Contact
+          Us</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-5">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 reveal">
+          <h2 class="fw-bold">About Us</h2>
+          <p class="lead">CASEP Group is a professional services company offering a comprehensive suite of solutions
+            across Accounting, Human Resource, Marketing, Advertising, and Technology. We are committed to transforming
+            how businesses operate by providing strategic, innovative, and results-driven services that enable
+            sustainable growth in today’s competitive environment.</p>
+          <div class="mt-3">
+            <button class="btn btn-outline-primary me-2" id="openServiceModalBtn" data-service="all">Explore
+              Services</button>
+            <a href="#contact" class="btn btn-warning">Get In Touch</a>
+          </div>
+        </div>
+        <div class="col-lg-6 text-center reveal">
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="p-4 bg-white rounded shadow-sm">
+                <div class="stat" data-target="12">0</div>
+                <div class="small">Years Experience</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-4 bg-white rounded shadow-sm">
+                <div class="stat" data-target="250">0</div>
+                <div class="small">Projects Completed</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-4 bg-white rounded shadow-sm">
+                <div class="stat" data-target="45">0</div>
+                <div class="small">Satisfied Clients</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-4 bg-white rounded shadow-sm">
+                <div class="stat" data-target="8">0</div>
+                <div class="small">Industry Partners</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISION -->
+  <section id="vision" class="bg-light py-5">
+    <div class="container reveal">
+      <h3 class="fw-bold text-center mb-3">Our Vision</h3>
+      <p class="text-center mx-auto" style="max-width: 850px;">To become a leading African business solutions provider
+        recognized for excellence, innovation, and integrity.</p>
+    </div>
+  </section>
+
+  <!-- MISSION -->
+  <section id="mission" class="py-5">
+    <div class="container reveal">
+      <h3 class="fw-bold text-center mb-3">Our Mission</h3>
+      <p class="text-center mx-auto" style="max-width: 850px;">To empower organizations with tailored services that
+        enhance performance, unlock opportunities, and create measurable value.</p>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="bg-light py-5">
+    <div class="container">
+      <h3 class="fw-bold text-center mb-5 reveal">Our Core Services</h3>
+      <div class="row g-4">
+        <!-- Service cards clickable -->
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="card card-service h-100 border-0">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3">
+                <div class="fs-2 text-warning"><i class="bi bi-calculator-fill"></i></div>
+                <div>
+                  <h5 class="card-title">Accounting</h5>
+                  <p class="card-text">Bookkeeping, auditing, payroll, tax advisory and strategic financial planning.
+                  </p>
+                  <button class="btn btn-sm btn-outline-primary mt-2 service-details"
+                    data-service="Accounting">Details</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="card card-service h-100 border-0">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3">
+                <div class="fs-2 text-warning"><i class="bi bi-people-fill"></i></div>
+                <div>
+                  <h5 class="card-title">Human Resource</h5>
+                  <p class="card-text">Recruitment, HR outsourcing, performance management and training.</p>
+                  <button class="btn btn-sm btn-outline-primary mt-2 service-details"
+                    data-service="Human Resource">Details</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="card card-service h-100 border-0">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3">
+                <div class="fs-2 text-warning"><i class="bi bi-bullseye"></i></div>
+                <div>
+                  <h5 class="card-title">Marketing</h5>
+                  <p class="card-text">Brand positioning, market research and campaign planning.</p>
+                  <button class="btn btn-sm btn-outline-primary mt-2 service-details"
+                    data-service="Marketing">Details</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="card card-service h-100 border-0">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3">
+                <div class="fs-2 text-warning"><i class="bi bi-megaphone-fill"></i></div>
+                <div>
+                  <h5 class="card-title">Advertising</h5>
+                  <p class="card-text">Creative campaigns, media management and content creation.</p>
+                  <button class="btn btn-sm btn-outline-primary mt-2 service-details"
+                    data-service="Advertising">Details</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="card card-service h-100 border-0">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3">
+                <div class="fs-2 text-warning"><i class="bi bi-laptop"></i></div>
+                <div>
+                  <h5 class="card-title">Technology</h5>
+                  <p class="card-text">Digital transformation, software development and cybersecurity.</p>
+                  <button class="btn btn-sm btn-outline-primary mt-2 service-details"
+                    data-service="Technology">Details</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="card card-service h-100 border-0">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3">
+                <div class="fs-2 text-warning"><i class="bi bi-gear-fill"></i></div>
+                <div>
+                  <h5 class="card-title">Consulting</h5>
+                  <p class="card-text">Strategic advisory, operations improvement and business resilience.</p>
+                  <button class="btn btn-sm btn-outline-primary mt-2 service-details"
+                    data-service="Consulting">Details</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section id="values" class="py-5">
+    <div class="container reveal">
+      <h3 class="fw-bold text-center mb-4">Our Values</h3>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="p-4 border rounded h-100">
+            <h5 class="fw-bold">Integrity</h5>
+            <p>We uphold the highest ethical standards in every engagement.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 border rounded h-100">
+            <h5 class="fw-bold">Innovation</h5>
+            <p>We leverage modern tools and strategies to stay ahead of industry trends.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 border rounded h-100">
+            <h5 class="fw-bold">Excellence</h5>
+            <p>We deliver quality solutions that exceed client expectations.</p>
+          </div>
+        </div>
+        <div class="col-md-6 mt-3">
+          <div class="p-4 border rounded h-100">
+            <h5 class="fw-bold">Collaboration</h5>
+            <p>We build strong, long-term partnerships with our clients.</p>
+          </div>
+        </div>
+        <div class="col-md-6 mt-3">
+          <div class="p-4 border rounded h-100">
+            <h5 class="fw-bold">Sustainability</h5>
+            <p>We design solutions with long-term business growth in mind.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY PARTNER -->
+  <section id="partner" class="bg-light py-5">
+    <div class="container reveal">
+      <h3 class="fw-bold text-center mb-4">Why Partner with CASEP Group?</h3>
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+          <ul class="list-group list-group-flush shadow-sm">
+            <li class="list-group-item">Comprehensive expertise under one roof – multidisciplinary solutions for
+              seamless business operations.</li>
+            <li class="list-group-item">Client-centric approach – we tailor our services to each organization’s unique
+              needs.</li>
+            <li class="list-group-item">Proven results – track record of enabling businesses to scale effectively.</li>
+            <li class="list-group-item">Forward-looking solutions – leveraging technology and data-driven strategies to
+              stay competitive.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT (inline & modal trigger) -->
+  <section id="contact" class="py-5">
+    <div class="container reveal">
+      <div class="row">
+        <div class="col-lg-6">
+          <h3 class="fw-bold mb-3">Contact Us</h3>
+          <p>Have questions or want to work with us? Send us a message below or use the Enquire button to open the quick
+            modal form.</p>
+          <form id="contactForm">
+            <div class="mb-3">
+              <input type="text" class="form-control" id="name" placeholder="Your name" required>
+            </div>
+            <div class="mb-3">
+              <input type="email" class="form-control" id="email" placeholder="Email address" required>
+            </div>
+            <div class="mb-3">
+              <select class="form-select" id="serviceSelect">
+                <option value="">I'm interested in...</option>
+                <option>Accounting</option>
+                <option>Human Resource</option>
+                <option>Marketing</option>
+                <option>Advertising</option>
+                <option>Technology</option>
+                <option>Consulting</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <textarea class="form-control" id="message" rows="4" placeholder="Message"></textarea>
+            </div>
+            <button class="btn btn-warning" type="submit">Send Message</button>
+          </form>
+        </div>
+
+        <div class="col-lg-6 text-center">
+          <h5 class="mb-3">Testimonials</h5>
+          <div id="testimonialCarousel" class="carousel slide reveal" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <blockquote class="blockquote">
+                  <p class="mb-0">"CASEP helped us restructure and cut costs while improving efficiency."</p>
+                  <footer class="blockquote-footer">CEO, TechCo</footer>
+                </blockquote>
+              </div>
+              <div class="carousel-item">
+                <blockquote class="blockquote">
+                  <p class="mb-0">"Their tailored HR solutions simplified our hiring process."</p>
+                  <footer class="blockquote-footer">HR Lead, RetailCo</footer>
+                </blockquote>
+              </div>
+              <div class="carousel-item">
+                <blockquote class="blockquote">
+                  <p class="mb-0">"Professional, responsive and results-driven."</p>
+                  <footer class="blockquote-footer">COO, FinanceCorp</footer>
+                </blockquote>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel"
+              data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel"
+              data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-dark text-light py-4">
+    <div class="container text-center">
+      <div class="mb-3">
+        <a class="social-icon text-light" href="#"><i class="bi bi-facebook"></i></a>
+        <a class="social-icon text-light" href="#"><i class="bi bi-linkedin"></i></a>
+        <a class="social-icon text-light" href="#"><i class="bi bi-twitter"></i></a>
+      </div>
+      <p class="mb-1 fw-bold">CASEP Group © <span id="year"></span></p>
+      <small>Empowering organizations through innovation and excellence.</small>
+    </div>
+  </footer>
+
+  <!-- BACK TO TOP -->
+  <button id="backToTop" class="btn btn-warning shadow" title="Back to top">
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+  <!-- SERVICE DETAILS MODAL -->
+  <div class="modal fade" id="serviceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="serviceModalTitle">Service</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="serviceModalBody">
+          <!-- Filled by JS -->
+          <p>Loading service details...</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-warning" id="modalEnquireBtn">Enquire About This</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT MODAL (simulate send) -->
+  <div class="modal fade" id="contactModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form id="modalContactForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Quick Enquiry</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div id="modalAlert" class="alert d-none" role="alert"></div>
+            <div class="mb-3">
+              <input type="text" id="mname" class="form-control" placeholder="Your name" required>
+            </div>
+            <div class="mb-3">
+              <input type="email" id="memail" class="form-control" placeholder="Email address" required>
+            </div>
+            <div class="mb-3">
+              <select id="mservice" class="form-select">
+                <option value="">Service of interest</option>
+                <option>Accounting</option>
+                <option>Human Resource</option>
+                <option>Marketing</option>
+                <option>Advertising</option>
+                <option>Technology</option>
+                <option>Consulting</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <textarea id="mmessage" class="form-control" rows="4" placeholder="Message"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" id="modalSendBtn" class="btn btn-warning">Send Enquiry</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thank you small modal -->
+  <div class="modal fade" id="thankModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content text-center p-3">
+        <div class="mt-2">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+        </div>
+        <div class="modal-body">
+          <h5 class="fw-bold">Thanks!</h5>
+          <p class="mb-0">Your enquiry has been received. We'll get back to you soon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ========= Utility & Initial Setup =========
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    const savedTheme = localStorage.getItem('casepTheme') || 'light';
+    body.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+
+    function updateThemeIcon(theme) {
+      if (!themeToggle) return;
+      themeToggle.innerHTML = theme === 'dark' ? '<i class="bi bi-sun-fill"></i>' : '<i class="bi bi-moon-fill"></i>';
+      themeToggle.classList.toggle('btn-outline-light', theme === 'light');
+    }
+
+    themeToggle?.addEventListener('click', () => {
+      const current = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', current);
+      localStorage.setItem('casepTheme', current);
+      updateThemeIcon(current);
+    });
+
+    // ========= Navbar behavior on scroll (keeps transparent; only padding changes) =========
+    const nav = document.getElementById('mainNav');
+
+    function handleNav() {
+      if (window.scrollY > 40) {
+        nav.classList.add('navbar-shrink');
+      } else {
+        nav.classList.remove('navbar-shrink');
+      }
+    }
+    handleNav();
+    window.addEventListener('scroll', handleNav);
+
+    // ========= Reveal on scroll =========
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ========= Counters animation =========
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = +el.getAttribute('data-target');
+          let start = 0;
+          const duration = 1600;
+          const stepTime = Math.max(10, Math.abs(Math.floor(duration / target)));
+          const increment = Math.max(1, Math.ceil(target / (duration / stepTime)));
+          const timer = setInterval(() => {
+            start += increment;
+            if (start >= target) {
+              el.textContent = target;
+              clearInterval(timer);
+            } else {
+              el.textContent = start;
+            }
+          }, stepTime);
+          statObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.stat').forEach(s => statObserver.observe(s));
+
+    // ========= Back to top =========
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) backBtn.style.display = 'block';
+      else backBtn.style.display = 'none';
+    });
+    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // ========= Smooth scroll for anchor links (native handled by CSS, but ensure offset for fixed nav) =========
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href.length > 1) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (!target) return;
+          const navHeight = nav.offsetHeight + 8;
+          const targetPos = target.getBoundingClientRect().top + window.scrollY - navHeight;
+          window.scrollTo({ top: targetPos, behavior: 'smooth' });
+          // collapse mobile menu
+          const bsCollapse = bootstrap.Collapse.getInstance(document.getElementById('navMenu'));
+          if (bsCollapse && window.getComputedStyle(document.querySelector('.navbar-toggler')).display !== 'none') {
+            bsCollapse.hide();
+          }
+        }
+      });
+    });
+
+    // ========= Service details modal content =========
+    const services = {
+      "Accounting": {
+        title: "Accounting Services",
+        body: "<p>Comprehensive financial management: bookkeeping, auditing, payroll, tax advisory, compliance and strategic financial planning. We provide timely financial reports and actionable insights.</p>"
+      },
+      "Human Resource": {
+        title: "Human Resource Services",
+        body: "<p>Recruitment, HR outsourcing, performance management, workforce training and organisational development. We help build effective teams and HR systems.</p>"
+      },
+      "Marketing": {
+        title: "Marketing Services",
+        body: "<p>Brand positioning, market research, campaign planning, and customer engagement strategies designed to grow your market share.</p>"
+      },
+      "Advertising": {
+        title: "Advertising Services",
+        body: "<p>Creative campaigns, media management and content creation across digital and traditional channels to ensure your message reaches the right audience.</p>"
+      },
+      "Technology": {
+        title: "Technology Services",
+        body: "<p>Digital transformation, IT infrastructure, software development, cybersecurity and systems integration to modernize your operations.</p>"
+      },
+      "Consulting": {
+        title: "Consulting Services",
+        body: "<p>Strategic advisory, process improvement and implementation support to help your business operate more effectively and profitably.</p>"
+      },
+      "all": {
+        title: "Our Services",
+        body: "<p>Explore our core services: Accounting, Human Resource, Marketing, Advertising, Technology and Consulting. Choose a service to see detailed offerings and enquire directly.</p>"
+      }
+    };
+
+    const serviceModal = new bootstrap.Modal(document.getElementById('serviceModal'));
+    let selectedServiceName = 'all';
+
+    document.querySelectorAll('.service-details, #openServiceModalBtn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const name = btn.dataset.service || btn.getAttribute('data-service') || 'all';
+        selectedServiceName = name;
+        const info = services[name] || services['all'];
+        document.getElementById('serviceModalTitle').textContent = info.title;
+        document.getElementById('serviceModalBody').innerHTML = info.body + '<hr><p><strong>Ready to discuss?</strong> Click Enquire to open the quick contact form.</p>';
+        serviceModal.show();
+      });
+    });
+
+    // Enquire from service modal opens contact modal prefilled
+    document.getElementById('modalEnquireBtn').addEventListener('click', () => {
+      serviceModal.hide();
+      const contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
+      // Prefill selected service into modal select
+      const mservice = document.getElementById('mservice');
+      if (mservice) {
+        // try to match option text (case-sensitive), fallback to first option
+        let found = false;
+        for (let i = 0; i < mservice.options.length; i++) {
+          if (mservice.options[i].text === selectedServiceName) {
+            mservice.selectedIndex = i;
+            found = true;
+            break;
+          }
+        }
+        if (!found) mservice.value = selectedServiceName;
+      }
+      contactModal.show();
+    });
+
+    // ========= Contact form (inline) - simulate send =========
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      simulateSend({
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        service: document.getElementById('serviceSelect').value,
+        message: document.getElementById('message').value
+      });
+    });
+
+    // ========= Modal contact form - simulate send with spinner & thank you =========
+    const modalContactForm = document.getElementById('modalContactForm');
+    modalContactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const sendBtn = document.getElementById('modalSendBtn');
+      const modalAlert = document.getElementById('modalAlert');
+
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sending...';
+
+      // Simulate network delay
+      setTimeout(() => {
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = 'Send Enquiry';
+        modalAlert.className = 'alert alert-success';
+        modalAlert.textContent = 'Your enquiry has been simulated as sent. Thank you!';
+        modalAlert.classList.remove('d-none');
+
+        // show small thank modal after short delay
+        setTimeout(() => {
+          const bsContactModal = bootstrap.Modal.getInstance(document.getElementById('contactModal'));
+          bsContactModal?.hide();
+          const thank = new bootstrap.Modal(document.getElementById('thankModal'));
+          thank.show();
+          // reset form
+          modalContactForm.reset();
+          modalAlert.classList.add('d-none');
+        }, 900);
+      }, 1400);
+    });
+
+    // Simulation helper - show toast-like success then reset
+    function simulateSend(payload) {
+      // Visual feedback: small temporary inline 'sent' state
+      const btn = contactForm.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      const original = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Sending...';
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = original;
+        // small floating "thank you"
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed bottom-0 end-0 p-3';
+        toast.style.zIndex = 9999;
+        toast.innerHTML = '<div class="toast show align-items-center text-bg-success border-0"><div class="d-flex"><div class="toast-body">Thanks! Your message was simulated as sent.</div><button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"></button></div></div>';
+        document.body.appendChild(toast);
+        toast.querySelector('.btn-close').addEventListener('click', () => toast.remove());
+        contactForm.reset();
+      }, 1200);
+    }
+
+    // ========= Small enhancements =========
+    // Close navbar collapse on click (for mobile)
+    document.querySelectorAll('#navMenu .nav-link').forEach(navlink => {
+      navlink.addEventListener('click', () => {
+        const bsCollapse = bootstrap.Collapse.getInstance(document.getElementById('navMenu'));
+        if (bsCollapse && window.innerWidth < 992) bsCollapse.hide();
+      });
+    });
+
+    // Auto-start testimonials carousel
+    const testimonialEl = document.querySelector('#testimonialCarousel');
+    if (testimonialEl) {
+      new bootstrap.Carousel(testimonialEl, { interval: 4500, ride: 'carousel' });
+    }
+
+    // Accessibility: focus first input when contact modal opens
+    const contactModalEl = document.getElementById('contactModal');
+    contactModalEl.addEventListener('shown.bs.modal', () => {
+      document.getElementById('mname').focus();
+    });
+
+    // Ensure hero content animates on load
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.hero-content.reveal').forEach(h => h.classList.add('visible'));
+    });
+
+    // keyboard shortcut: "E" opens enquire modal for quick testing (useful dev)
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'e' && !document.querySelector('.modal.show')) {
+        const contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
+        contactModal.show();
+      }
+    });
+
+    // End of script
+  </script>
+</body>
+
+</html>
+
