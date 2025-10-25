@@ -130,22 +130,22 @@ body[data-theme="dark"] .stat {
     color: var(--accent);
 }
 
+/* Apply only on mobile screens */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background-color: rgba(0, 0, 0, 0.85); /* Dark transparent background */
+    padding: 1rem;
+    border-radius: 8px;
+  }
 
-/* Mobile dropdown background */
-.navbar-collapse {
-  background-color: rgba(0, 0, 0, 0.85); /* dark translucent background */
-  padding: 1rem;
-  border-radius: 8px;
-}
+  .navbar-collapse .nav-link {
+    color: #fff;
+  }
 
-/* Optional: make links look brighter inside the dropdown */
-.navbar-collapse .nav-link {
-  color: #fff;
-}
-
-.navbar-collapse .nav-link:hover {
-  background-color: rgba(255, 193, 7, 0.2);
-  border-radius: 6px;
+  .navbar-collapse .nav-link:hover {
+    background-color: rgba(255, 193, 7, 0.2);
+    border-radius: 6px;
+  }
 }
 
 /* Reveal on scroll */
