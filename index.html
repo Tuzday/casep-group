@@ -11,9 +11,9 @@
 
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css">
   <style>
-    
+
   </style>
 </head>
 
@@ -26,8 +26,8 @@
         <img src="casep logo.png" alt="CASEP Group Logo" class="me-2" style="height: 90px; width: auto;">
         <span class="fw-bold text-white visually-hidden">CASEP Group</span>
       </a>
-      <button class="btn btn-outline-light d-lg-none me-2" id="themeToggle" title="Toggle theme"><i
-          class="bi bi-moon-fill"></i></button>
+      <!-- <button class="btn btn-outline-light d-lg-none me-2" id="themeToggle" title="Toggle theme"><i
+          class="bi bi-moon-fill"></i></button> -->
       <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -150,7 +150,7 @@
                 <div class="fs-2 text-warning"><i class="bi bi-calculator-fill"></i></div>
                 <div>
                   <h5 class="card-title">Accounting</h5>
-                  <p class="card-text">Bookkeeping, auditing, payroll, tax advisory and strategic financial planning.
+                  <p class="card-text">Bookkeeping, auditing, payroll management, tax advisory and strategic financial planning.
                   </p>
                   <button class="btn btn-sm btn-outline-primary mt-2 service-details"
                     data-service="Accounting">Details</button>
@@ -337,6 +337,8 @@
         </div>
 
         <div class="col-lg-6 text-center">
+          <br>
+          <br>
           <h5 class="mb-3">Testimonials</h5>
           <div id="testimonialCarousel" class="carousel slide reveal" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -358,7 +360,7 @@
                 <blockquote class="blockquote">
                   <p class="mb-0">"Professional, responsive and results-driven."</p>
                   <br>
-                  <footer class="blockquote-footer">COO, FinanceCorp</footer>
+                  <footer class="blockquote-footer">CEO, FinanceCorp</footer>
                 </blockquote>
               </div>
             </div>
@@ -501,7 +503,8 @@
     </div>
 
     <div class="chat-footer">
-      <input id="chatInput" type="text" placeholder="Type a message — e.g. 'pricing', 'services', 'contact'" aria-label="Message input">
+      <input id="chatInput" type="text" placeholder="Type a message — e.g. 'pricing', 'services', 'contact'"
+        aria-label="Message input">
       <button class="btn btn-warning" id="sendBtn" title="Send message"><i class="bi bi-send-fill"></i></button>
     </div>
   </div>
@@ -514,21 +517,21 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Theme toggle (existing)
-    const themeToggle = document.getElementById('themeToggle');
-    const bodyEl = document.body;
-    const savedTheme = localStorage.getItem('casepTheme') || 'light';
-    bodyEl.setAttribute('data-theme', savedTheme);
-    if (themeToggle) {
-      themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="bi bi-sun-fill"></i>' : '<i class="bi bi-moon-fill"></i>';
-      themeToggle.classList.toggle('btn-outline-light', savedTheme === 'light');
-      themeToggle.addEventListener('click', () => {
-        const next = bodyEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        bodyEl.setAttribute('data-theme', next);
-        localStorage.setItem('casepTheme', next);
-        themeToggle.innerHTML = next === 'dark' ? '<i class="bi bi-sun-fill"></i>' : '<i class="bi bi-moon-fill"></i>';
-        themeToggle.classList.toggle('btn-outline-light', next === 'light');
-      });
-    }
+    //const themeToggle = document.getElementById('themeToggle');
+    //const bodyEl = document.body;
+    //const savedTheme = localStorage.getItem('casepTheme') || 'light';
+    //bodyEl.setAttribute('data-theme', savedTheme);
+    //if (themeToggle) {
+     // themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="bi bi-sun-fill"></i>' : '<i class="bi bi-moon-fill"></i>';
+     // themeToggle.classList.toggle('btn-outline-light', savedTheme === 'light');
+     // themeToggle.addEventListener('click', () => {
+      //  const next = bodyEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      //  bodyEl.setAttribute('data-theme', next);
+       // localStorage.setItem('casepTheme', next);
+      //  themeToggle.innerHTML = next === 'dark' ? '<i class="bi bi-sun-fill"></i>' : '<i class="bi bi-moon-fill"></i>';
+       // themeToggle.classList.toggle('btn-outline-light', next === 'light');
+   //   });
+   // } 
 
     // ========= Navbar behavior on scroll (keeps transparent; only padding changes) =========
     const nav = document.getElementById('mainNav');
@@ -620,7 +623,7 @@
     const services = {
       "Accounting": {
         title: "Accounting Services",
-        body: "<p>Comprehensive financial management: bookkeeping, auditing, payroll, tax advisory, compliance and strategic financial planning. We provide timely financial reports and actionable insights.</p>"
+        body: "<p>Comprehensive financial management: bookkeeping, auditing, payroll management, tax advisory, compliance and strategic financial planning. We provide timely financial reports and actionable insights.</p>"
       },
       "Human Resource": {
         title: "Human Resource Services",
@@ -780,7 +783,7 @@
     // default bot behavior - customizable responses
     const BOT_KB = [
       { q: /pricing|price|cost/i, a: "Our pricing depends on the service and scale. For a quick estimate, tell me which service you're interested in and approximate scope (e.g., monthly bookkeeping for 1-5 employees)." },
-      { q: /accounting/i, a: "We offer bookkeeping, audits, payroll, tax advisory and strategic financial planning. Want a detailed PDF-ready scope?" },
+      { q: /accounting/i, a: "We offer bookkeeping, audits, payroll management, tax advisory and strategic financial planning. Want a detailed PDF-ready scope?" },
       { q: /hr|human resource|hiring/i, a: "We provide recruitment, HR outsourcing, performance management, and training programs. Would you like sample packages?" },
       { q: /marketing/i, a: "Marketing services include brand positioning, market research, and campaign planning. Tell me your industry for suggestions." },
       { q: /advertis|ad campaig/i, a: "We handle creative campaigns, media buying and content production across digital and traditional channels." },

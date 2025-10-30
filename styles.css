@@ -42,7 +42,7 @@ html {
 
 .nav-link {
   color: var(--text-dark);
-  position: relative;
+  position: flex;
   padding: 8px 16px;
   border-radius: 6px;
   transition: all 0.3s ease;
@@ -61,12 +61,6 @@ html {
   color: #fff !important;
 }
 
-
-
-/* .nav-link:hover {
-    color: var(--accent) !important;
-    transform: translateY(-2px);
-} */
 
 /* Hero video */
 .hero-section {
