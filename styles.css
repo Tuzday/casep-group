@@ -27,21 +27,21 @@ html {
 
 /* Navbar shrink (only padding change; remains transparent) */
 .navbar-shrink {
-    padding-top: .25rem !important;
-    padding-bottom: .25rem !important;
-    transition: padding .25s ease;
-    /* intentionally no background so navbar stays transparent */
+  padding-top: .25rem !important;
+  padding-bottom: .25rem !important;
+  transition: padding .25s ease;
+  background: transparent !important;
 }
 
 .navbar {
-    padding-top: .75rem;
-    padding-bottom: .75rem;
-    transition: padding .25s ease;
-    background: transparent !important;
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  transition: padding .25s ease, top 0.4s ease;
+  background: transparent !important;
 }
 
 .nav-link {
-  color: var(--text-dark);
+  color: var(--text-light);
   position: flex;
   padding: 8px 16px;
   border-radius: 6px;
@@ -50,15 +50,21 @@ html {
 
 /* Hover effect */
 .nav-link:hover {
-  background-color: rgba(255, 193, 7, 0.2); /* soft yellow glow (you can change this) */
-  color: var(--bs-warning); /* matches Bootstrap warning color */
-  transform: translateY(-2px); /* slight lift effect */
+  background-color: rgba(255, 193, 7, 0.2);
+  color: var(--bs-warning);
+  transform: translateY(-2px);
 }
 
-/* Optional: active state */
+/* Active link */
 .nav-link.active {
   background-color: var(--bs-warning);
   color: #fff !important;
+}
+
+/* Hidden navbar when scrolling down */
+.navbar.hidden {
+  top: -100px;
+  transition: top 0.4s ease;
 }
 
 
