@@ -111,14 +111,6 @@ const services = {
         title: "Accounting Services",
         body: "<p>Comprehensive financial management: bookkeeping, auditing, payroll management, tax advisory, compliance and strategic financial planning. We provide timely financial reports and actionable insights.</p>"
     },
-    "Human Resource": {
-        title: "Human Resource Services",
-        body: "<p>Recruitment, HR outsourcing, performance management, workforce training and organisational development. We help build effective teams and HR systems.</p>"
-    },
-    "Marketing": {
-        title: "Marketing Services",
-        body: "<p>Brand positioning, market research, campaign planning, and customer engagement strategies designed to grow your market share.</p>"
-    },
     "Advertising": {
         title: "Advertising Services",
         body: "<p>Creative campaigns, media management and content creation across digital and traditional channels to ensure your message reaches the right audience.</p>"
@@ -127,13 +119,9 @@ const services = {
         title: "Technology Services",
         body: "<p>Digital transformation, IT infrastructure, software development, cybersecurity and systems integration to modernize your operations.</p>"
     },
-    "Consulting": {
-        title: "Consulting Services",
-        body: "<p>Strategic advisory, process improvement and implementation support to help your business operate more effectively and profitably.</p>"
-    },
     "all": {
         title: "Our Services",
-        body: "<p>Explore our core services: Accounting, Human Resource, Marketing, Advertising, Technology and Consulting. Choose a service to see detailed offerings and enquire directly.</p>"
+        body: "<p>Explore our core services: Accounting, Advertising and Technology. Choose a service to see detailed offerings and enquire directly.</p>"
     }
 };
 
@@ -270,11 +258,8 @@ const CHAT_KEY = 'casep_chat_history_v1';
 const BOT_KB = [
     { q: /pricing|price|cost/i, a: "Our pricing depends on the service and scale. For a quick estimate, tell me which service you're interested in and approximate scope (e.g., monthly bookkeeping for 1-5 employees)." },
     { q: /accounting/i, a: "We offer bookkeeping, audits, payroll management, tax advisory and strategic financial planning. Want a detailed PDF-ready scope?" },
-    { q: /hr|human resource|hiring/i, a: "We provide recruitment, HR outsourcing, performance management, and training programs. Would you like sample packages?" },
-    { q: /marketing/i, a: "Marketing services include brand positioning, market research, and campaign planning. Tell me your industry for suggestions." },
     { q: /advertis|ad campaig/i, a: "We handle creative campaigns, media buying and content production across digital and traditional channels." },
     { q: /technology|it|software/i, a: "Technology services: digital transformation, systems integration, software development, and cybersecurity." },
-    { q: /consult/i, a: "Our consulting team focuses on strategy, operations improvement, and implementation support. What's your primary challenge?" },
     { q: /contact|reach|call/i, a: "You can reach us via the contact form on the site or send an email to info@casep.example (replace with your real email). Want me to open the contact form?" }
 ];
 
